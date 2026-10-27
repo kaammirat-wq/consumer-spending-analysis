@@ -1,0 +1,98 @@
+---
+title: "Consumer Spending Analysis"
+author: "Kate Ammirati"
+date: "2026-10-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+  )
+```
+
+## Project Objective
+The objective of this project is to analyze average annual consumer expenditures across income groups in the United States from 2022 to 2024 using data from the Bureau of Labor Statistics Consumer Expenditure Survey.
+Using R, I will explore how spending varies by income level, identify changes in spending over time, and create visualizations to highlight key findings.
+
+Data Source
+This project uses data from the U.S. Bureau of Labor Statistics Consumer Expenditure Survey for 2022-2025. The dataset contains average annual consumer expenditures for all consumers and five income groups, which allows for comparisons of spending patterns across income levels and over time.
+
+Source: https://www.bls.gov/cex/tables.htm
+
+
+```{r, include=FALSE}
+
+library(tidyverse)
+
+consumer_spending <- read.csv("consumer_spending.csv")
+head(consumer_spending)
+str(consumer_spending)
+
+
+consumer_spending |> select(Series_ID) |> table()
+
+
+```
+
+## Consumer Spending by Year
+```{r}
+consumer_spending |>
+  filter(Series_ID == "CXUTOTALEXPLB0101M") |>
+  select(Year, Spending)
+```
+
+
+```{r}
+consumer_spending <- consumer_spending |>
+  mutate(Income_Group = factor(
+    Series_ID, 
+    levels = c(
+      "CXUTOTALEXPLB0101M",
+      "CXUTOTALEXPLB0102M",
+      "CXUTOTALEXPLB0103M",
+      "CXUTOTALEXPLB0104M",
+      "CXUTOTALEXPLB0105M",
+      "CXUTOTALEXPLB0106M"
+    ),
+    labels = c("All Consumers", "Lowest 20%", "Second 20%", "Middle 20%", "Fourth 20%", "Highest 20%")))
+```
+
+## Spending by Income Group
+```{r}
+
+consumer_spending |> filter(Year==2024) |> ggplot(aes(x=Income_Group, y=Spending)) + geom_jitter() +
+  labs(
+    title= "Consumer Spending by Income Grooup (2024)",
+    x= "Income Group",
+    y= "Average Annual Spending ($)"
+  )
+
+```
+
+## Consumer Spending Trends (2022-2024)
+```{r}
+
+consumer_spending |> filter(Income_Group != "All Consumers") |> 
+  ggplot(aes(x=Year, y=Spending, 
+             color=Income_Group)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Consumer Spending Trends (2022-2024)",
+    x = "Year",
+    y = "Average Annual Spending ($)",
+    color = "Income Group"
+  )
+```
+
+## Key Findings
+Analysis of Consumer Expenditure Survey data from 2022 to 2024 highlights several patterns in household spending:
+- Average annual spending increased across all five income quintiles between 2022 and 2024.
+- Higher income households consistently reported greater annual expenditures than lower-income households.
+- In 2024, the highest-income quintile spent approximately $150,342 annually, compared to the $35,046 for the lowest-income quintile.
+- These findings show substantial differences in consumer spending across income groups. 
+
+**Conclusion:** Consumer spending is varied by income level, with higher-income households spending substantially more annually. While spending increased across all income groups during the period analyzed, these nominal increases do not necessarily prove increases in purchasing power.
