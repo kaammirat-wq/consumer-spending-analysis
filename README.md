@@ -3,6 +3,10 @@
 ## Project Overview
 This project analyzes average annual consumer expenditures across income groups in the United States from 2022 to 2024. Using R, I explored differences in spending by income level and examined how spending changed over time.
 
+### View Full Analysis
+Click here to view my complete Consumer Spending Analysis report
+(https://kaammirat-wq.github.io/consumer-spending-analysis/analysis.html)
+
 ## Data Source
 U.S. Bureau of Labor Statistics (BLS) — Consumer Expenditure Surveys
 
